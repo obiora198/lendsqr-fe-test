@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { MoreVertical, ListFilter, Eye, UserX, UserCheck } from 'lucide-react';
 import { userService } from '../services/api';
 import type { User } from '../types/user';
@@ -18,6 +18,10 @@ const Users: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<string | null>(null);
   const [activeActions, setActiveActions] = useState<string | null>(null);
   
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const globalSearch = searchParams.get('search') || '';
+
   // Filter states
   const [filterValues, setFilterValues] = useState({
     orgName: '',
@@ -61,7 +65,13 @@ const Users: React.FC = () => {
   // Filtering logic
   const filteredUsers = useMemo(() => {
     return users.filter(user => {
-      return (
+      const matchesGlobalSearch = !globalSearch || 
+        user.userName.toLowerCase().includes(globalSearch.toLowerCase()) ||
+        user.email.toLowerCase().includes(globalSearch.toLowerCase()) ||
+        user.phoneNumber.includes(globalSearch) ||
+        user.orgName.toLowerCase().includes(globalSearch.toLowerCase());
+
+      const matchesFilters = (
         (!appliedFilters.orgName || user.orgName.toLowerCase().includes(appliedFilters.orgName.toLowerCase())) &&
         (!appliedFilters.userName || user.userName.toLowerCase().includes(appliedFilters.userName.toLowerCase())) &&
         (!appliedFilters.email || user.email.toLowerCase().includes(appliedFilters.email.toLowerCase())) &&
@@ -69,8 +79,10 @@ const Users: React.FC = () => {
         (!appliedFilters.status || user.status === appliedFilters.status) &&
         (!appliedFilters.date || new Date(user.createdAt).toDateString() === new Date(appliedFilters.date).toDateString())
       );
+
+      return matchesGlobalSearch && matchesFilters;
     });
-  }, [users, appliedFilters]);
+  }, [users, appliedFilters, globalSearch]);
 
   // Pagination logic
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -107,6 +119,7 @@ const Users: React.FC = () => {
     setAppliedFilters(initial);
     setCurrentPage(1);
     setActiveFilter(null);
+    if (globalSearch) navigate('/users'); // Clear global search too
   };
 
   const FilterPopover = ({ className }: { className?: string }) => (
@@ -184,6 +197,12 @@ const Users: React.FC = () => {
       </div>
 
       <div className="table-container">
+        {globalSearch && (
+          <div style={{ padding: '10px 20px', backgroundColor: '#f5f5f5', borderRadius: '4px', marginBottom: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <span>Showing results for: <strong>{globalSearch}</strong></span>
+            <button onClick={() => navigate('/users')} style={{ color: '#213f7d', fontWeight: 600, cursor: 'pointer' }}>Clear</button>
+          </div>
+        )}
         <table className="users-table">
           <thead>
             <tr>

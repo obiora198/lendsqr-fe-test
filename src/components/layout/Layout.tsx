@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Navbar from './Navbar';
 import Sidebar from './Sidebar';
-import './DashboardLayout.scss';
+import './Layout.scss';
 
-const DashboardLayout: React.FC = () => {
+const Layout: React.FC = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const toggleSidebar = () => {
@@ -12,9 +12,9 @@ const DashboardLayout: React.FC = () => {
   };
 
   return (
-    <div className="dashboard-layout">
+    <div className="layout">
       <Navbar toggleSidebar={toggleSidebar} />
-      <div className="dashboard-content">
+      <div className="layout-content">
         <Sidebar isOpen={isSidebarOpen} />
         <main className="main-content">
           <Outlet />
@@ -24,4 +24,4 @@ const DashboardLayout: React.FC = () => {
   );
 };
 
-export default DashboardLayout;
+export default Layout;
