@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap');
+@import './styles/variables';
+@import './styles/mixins';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: $font-family;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: $bg-color;
+  color: $text-color;
+  line-height: 1.5;
+  @include scrollbar;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-family;
+  color: $text-color-dark;
+  font-weight: 600;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+ul {
+  list-style: none;
+}
+
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+  outline: none;
+}
+
+input {
+  font-family: inherit;
+  outline: none;
+}
+
+// Utility Classes
+.container {
+  width: 100%;
+  max-width: $large-desktop;
+  margin: 0 auto;
+  padding: 0 $spacing-lg;
+}
+
+.flex {
+  display: flex;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.w-100 {
+  width: 100%;
+}

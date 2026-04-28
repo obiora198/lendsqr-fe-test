@@ -1,0 +1,43 @@
+// Colors
+$primary-color: #213f7d;
+$secondary-color: #39cdcc;
+$text-color: #545f7d;
+$text-color-dark: #213f7d;
+$bg-color: #fbfbfb;
+$white: #ffffff;
+$border-color: rgba(33, 63, 125, 0.1);
+$sidebar-bg: #ffffff;
+$sidebar-text: #213f7d;
+$sidebar-active: rgba(57, 205, 204, 0.06);
+
+// Status Colors
+$status-active-text: #39cd62;
+$status-active-bg: rgba(57, 205, 98, 0.06);
+$status-pending-text: #e9b200;
+$status-pending-bg: rgba(233, 178, 0, 0.06);
+$status-blacklisted-text: #e4033b;
+$status-blacklisted-bg: rgba(228, 3, 59, 0.06);
+$status-inactive-text: #545f7d;
+$status-inactive-bg: rgba(84, 95, 125, 0.06);
+
+// Typography
+$font-family: 'Work Sans', sans-serif;
+$font-family-secondary: 'Inter', sans-serif;
+
+// Breakpoints
+$mobile: 480px;
+$tablet: 768px;
+$desktop: 1024px;
+$large-desktop: 1440px;
+
+// Spacing
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 16px;
+$spacing-lg: 24px;
+$spacing-xl: 32px;
+$spacing-xxl: 48px;
+
+// Shadow
+$card-shadow: 3px 5px 20px rgba(0, 0, 0, 0.04);
+$dropdown-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
