@@ -2,7 +2,7 @@ import React from 'react';
 import './Card.scss';
 
 interface CardProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   className?: string;
   icon?: React.ReactNode;
   label?: string;

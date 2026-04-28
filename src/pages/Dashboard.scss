@@ -16,11 +16,3 @@
   margin-bottom: $spacing-xxl;
 }
 
-.dashboard-placeholder {
-  @include card;
-  @include flex-center;
-  min-height: 400px;
-  color: $text-color;
-  font-size: 18px;
-  opacity: 0.6;
-}
