@@ -20,7 +20,19 @@ const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 export const userService = {
   login: async (email: string): Promise<boolean> => {
     await delay(1000);
-    return !!email;
+    if (email) {
+      storage.save('lendsqr_session', { email, timestamp: Date.now() });
+      return true;
+    }
+    return false;
+  },
+
+  isAuthenticated: (): boolean => {
+    return !!storage.get('lendsqr_session');
+  },
+
+  logout: () => {
+    storage.remove('lendsqr_session');
   },
 
   getUsers: async (): Promise<User[]> => {

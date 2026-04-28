@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, Bell, ChevronDown, Menu, LogOut } from 'lucide-react';
+import { userService } from '../../services/api';
 import logo from '../../assets/logo.png';
 import avatar from '../../assets/avatar.png';
 import './Navbar.scss';
@@ -15,6 +16,7 @@ const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    userService.logout();
     navigate('/login');
   };
 

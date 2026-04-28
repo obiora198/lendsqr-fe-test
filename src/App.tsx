@@ -5,7 +5,16 @@ import Users from './pages/Users';
 import UserDetails from './pages/UserDetails';
 import Placeholder from './pages/Placeholder';
 import Layout from './components/layout/Layout';
+import { userService } from './services/api';
 import './index.scss';
+
+// Simple Protected Route Component
+const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+  if (!userService.isAuthenticated()) {
+    return <Navigate to="/login" replace />;
+  }
+  return children;
+};
 
 function App() {
   return (
@@ -13,7 +22,11 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         
-        <Route element={<Layout />}>
+        <Route element={
+          <ProtectedRoute>
+            <Layout />
+          </ProtectedRoute>
+        }>
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/users" element={<Users />} />
           <Route path="/users/:id" element={<UserDetails />} />
@@ -33,6 +46,9 @@ function App() {
           
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
         </Route>
+
+        {/* Fallback to login if route doesn't match */}
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </Router>
   );
