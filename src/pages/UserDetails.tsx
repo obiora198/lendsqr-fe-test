@@ -23,6 +23,14 @@ const UserDetails: React.FC = () => {
     fetchUser();
   }, [id]);
 
+  const handleStatusUpdate = async (status: User['status']) => {
+    if (!user) return;
+    const updatedUser = await userService.updateUserStatus(user.id, status);
+    if (updatedUser) {
+      setUser(updatedUser);
+    }
+  };
+
   if (loading) return <div className="loading">Loading user details...</div>;
   if (!user) return <div className="error">User not found</div>;
 
@@ -45,8 +53,20 @@ const UserDetails: React.FC = () => {
       <div className="page-header">
         <h1>User Details</h1>
         <div className="header-actions">
-          <Button variant="outline" className="blacklist-btn">BLACKLIST USER</Button>
-          <Button variant="outline" className="activate-btn">ACTIVATE USER</Button>
+          <Button 
+            variant="outline" 
+            className="blacklist-btn"
+            onClick={() => handleStatusUpdate('blacklisted')}
+          >
+            BLACKLIST USER
+          </Button>
+          <Button 
+            variant="outline" 
+            className="activate-btn"
+            onClick={() => handleStatusUpdate('active')}
+          >
+            ACTIVATE USER
+          </Button>
         </div>
       </div>
 

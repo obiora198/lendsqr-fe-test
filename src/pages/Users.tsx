@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MoreVertical, Eye, UserX, UserCheck, Filter } from 'lucide-react';
+import { MoreVertical, ListFilter, Eye, UserX, UserCheck } from 'lucide-react';
 import { userService } from '../services/api';
 import type { User } from '../types/user';
 import Card from '../components/common/Card';
@@ -14,7 +14,21 @@ const Users: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [activeFilter, setActiveFilter] = useState<string | null>(null);
+  const [activeActions, setActiveActions] = useState<string | null>(null);
+  
+  // Filter states
+  const [filterValues, setFilterValues] = useState({
+    orgName: '',
+    userName: '',
+    email: '',
+    date: '',
+    phoneNumber: '',
+    status: ''
+  });
+  const [appliedFilters, setAppliedFilters] = useState({ ...filterValues });
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,13 +38,18 @@ const Users: React.FC = () => {
       setLoading(false);
     };
     fetchUsers();
-  }, []);
 
-  // Pagination logic
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = users.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(users.length / itemsPerPage);
+    const handleClickOutside = (e: MouseEvent) => {
+      if (!(e.target as HTMLElement).closest('.filter-icon') && !(e.target as HTMLElement).closest('.filter-popover')) {
+        setActiveFilter(null);
+      }
+      if (!(e.target as HTMLElement).closest('.actions-btn') && !(e.target as HTMLElement).closest('.actions-popover')) {
+        setActiveActions(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const stats = [
     { label: 'Users', value: '2,453', icon: usersIcon, bg: 'rgba(223, 24, 255, 0.1)' },
@@ -39,9 +58,109 @@ const Users: React.FC = () => {
     { label: 'Users with Savings', value: '102,453', icon: usersWithSavingsIcon, bg: 'rgba(255, 51, 102, 0.1)' },
   ];
 
+  // Filtering logic
+  const filteredUsers = useMemo(() => {
+    return users.filter(user => {
+      return (
+        (!appliedFilters.orgName || user.orgName.toLowerCase().includes(appliedFilters.orgName.toLowerCase())) &&
+        (!appliedFilters.userName || user.userName.toLowerCase().includes(appliedFilters.userName.toLowerCase())) &&
+        (!appliedFilters.email || user.email.toLowerCase().includes(appliedFilters.email.toLowerCase())) &&
+        (!appliedFilters.phoneNumber || user.phoneNumber.includes(appliedFilters.phoneNumber)) &&
+        (!appliedFilters.status || user.status === appliedFilters.status) &&
+        (!appliedFilters.date || new Date(user.createdAt).toDateString() === new Date(appliedFilters.date).toDateString())
+      );
+    });
+  }, [users, appliedFilters]);
+
+  // Pagination logic
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredUsers.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+
   const handleUserClick = (id: string) => {
     navigate(`/users/${id}`);
   };
+
+  const handleStatusUpdate = async (id: string, status: User['status']) => {
+    const updatedUser = await userService.updateUserStatus(id, status);
+    if (updatedUser) {
+      setUsers(prev => prev.map(u => u.id === id ? updatedUser : u));
+    }
+    setActiveActions(null);
+  };
+
+  const handleFilterChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, value } = e.target;
+    setFilterValues(prev => ({ ...prev, [name]: value }));
+  };
+
+  const applyFilters = () => {
+    setAppliedFilters({ ...filterValues });
+    setCurrentPage(1);
+    setActiveFilter(null);
+  };
+
+  const resetFilters = () => {
+    const initial = { orgName: '', userName: '', email: '', date: '', phoneNumber: '', status: '' };
+    setFilterValues(initial);
+    setAppliedFilters(initial);
+    setCurrentPage(1);
+    setActiveFilter(null);
+  };
+
+  const FilterPopover = ({ className }: { className?: string }) => (
+    <div className={`filter-popover ${className || ''}`}>
+      <div className="filter-form-group">
+        <label>Organization</label>
+        <input type="text" name="orgName" value={filterValues.orgName} onChange={handleFilterChange} placeholder="Organization" />
+      </div>
+      <div className="filter-form-group">
+        <label>Username</label>
+        <input type="text" name="userName" value={filterValues.userName} onChange={handleFilterChange} placeholder="User" />
+      </div>
+      <div className="filter-form-group">
+        <label>Email</label>
+        <input type="text" name="email" value={filterValues.email} onChange={handleFilterChange} placeholder="Email" />
+      </div>
+      <div className="filter-form-group">
+        <label>Date</label>
+        <input type="date" name="date" value={filterValues.date} onChange={handleFilterChange} placeholder="Date" />
+      </div>
+      <div className="filter-form-group">
+        <label>Phone Number</label>
+        <input type="text" name="phoneNumber" value={filterValues.phoneNumber} onChange={handleFilterChange} placeholder="Phone Number" />
+      </div>
+      <div className="filter-form-group">
+        <label>Status</label>
+        <select name="status" value={filterValues.status} onChange={handleFilterChange}>
+          <option value="">Select</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+          <option value="pending">Pending</option>
+          <option value="blacklisted">Blacklisted</option>
+        </select>
+      </div>
+      <div className="filter-actions">
+        <button className="reset-btn" onClick={resetFilters}>Reset</button>
+        <button className="submit-btn" onClick={applyFilters}>Filter</button>
+      </div>
+    </div>
+  );
+
+  const ActionsPopover = ({ userId }: { userId: string }) => (
+    <div className="actions-popover">
+      <div className="action-item" onClick={() => handleUserClick(userId)}>
+        <Eye size={14} /> View Details
+      </div>
+      <div className="action-item" onClick={() => handleStatusUpdate(userId, 'blacklisted')}>
+        <UserX size={14} /> Blacklist User
+      </div>
+      <div className="action-item" onClick={() => handleStatusUpdate(userId, 'active')}>
+        <UserCheck size={14} /> Activate User
+      </div>
+    </div>
+  );
 
   if (loading) return <div className="loading">Loading users...</div>;
 
@@ -55,7 +174,11 @@ const Users: React.FC = () => {
             key={index}
             label={stat.label}
             value={stat.value}
-            icon={<img src={stat.icon} alt={stat.label} style={{ backgroundColor: stat.bg, padding: '8px', borderRadius: '50%' }} />}
+            icon={
+              <div style={{ backgroundColor: stat.bg, width: '50px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%' }}>
+                <img src={stat.icon} alt={stat.label} style={{ width: '36px', height: '36px' }} />
+              </div>
+            }
           />
         ))}
       </div>
@@ -64,12 +187,20 @@ const Users: React.FC = () => {
         <table className="users-table">
           <thead>
             <tr>
-              <th>ORGANIZATION <Filter size={14} /></th>
-              <th>USERNAME <Filter size={14} /></th>
-              <th>EMAIL <Filter size={14} /></th>
-              <th>PHONE NUMBER <Filter size={14} /></th>
-              <th>DATE JOINED <Filter size={14} /></th>
-              <th>STATUS <Filter size={14} /></th>
+              {['ORGANIZATION', 'USERNAME', 'EMAIL', 'PHONE NUMBER', 'DATE JOINED', 'STATUS'].map((col, index) => (
+                <th key={col}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    {col} 
+                    <ListFilter 
+                      size={14} 
+                      className="filter-icon" 
+                      style={{ cursor: 'pointer' }} 
+                      onClick={() => setActiveFilter(activeFilter === col ? null : col)}
+                    />
+                  </div>
+                  {activeFilter === col && <FilterPopover className={index >= 4 ? 'right-aligned' : ''} />}
+                </th>
+              ))}
               <th></th>
             </tr>
           </thead>
@@ -87,9 +218,13 @@ const Users: React.FC = () => {
                   </span>
                 </td>
                 <td className="actions-cell">
-                  <button onClick={() => handleUserClick(user.id)}>
+                  <button 
+                    className="actions-btn"
+                    onClick={() => setActiveActions(activeActions === user.id ? null : user.id)}
+                  >
                     <MoreVertical size={16} />
                   </button>
+                  {activeActions === user.id && <ActionsPopover userId={user.id} />}
                 </td>
               </tr>
             ))}
@@ -98,29 +233,26 @@ const Users: React.FC = () => {
 
         <div className="pagination">
           <div className="pagination-info">
-            Showing 
-            <select value={itemsPerPage} readOnly>
+            Showing
+            <select value={itemsPerPage} onChange={(e) => { setItemsPerPage(Number(e.target.value)); setCurrentPage(1); }}>
               <option value="10">10</option>
               <option value="20">20</option>
               <option value="50">50</option>
               <option value="100">100</option>
             </select>
-            out of {users.length}
+            out of {filteredUsers.length}
           </div>
           <div className="pagination-controls">
-            <button 
-              disabled={currentPage === 1} 
-              onClick={() => setCurrentPage(p => p - 1)}
-              className="prev-btn"
+            <button
+              disabled={currentPage === 1}
+              onClick={() => setCurrentPage((p) => p - 1)}
             >
               &lt;
             </button>
-            {/* Simple pagination numbers for now */}
             <span className="page-num active">{currentPage}</span>
-            <button 
-              disabled={currentPage === totalPages} 
-              onClick={() => setCurrentPage(p => p + 1)}
-              className="next-btn"
+            <button
+              disabled={currentPage === totalPages}
+              onClick={() => setCurrentPage((p) => p + 1)}
             >
               &gt;
             </button>
