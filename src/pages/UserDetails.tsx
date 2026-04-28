@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Star } from 'lucide-react';
+import { ArrowLeft, Star, CheckCircle } from 'lucide-react';
 import { userService } from '../services/api';
 import type { User } from '../types/user';
 import Button from '../components/common/Button';
@@ -10,6 +10,8 @@ const UserDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isUpdating, setIsUpdating] = useState<string | null>(null);
+  const [showSuccess, setShowSuccess] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('General Details');
 
   useEffect(() => {
@@ -25,10 +27,18 @@ const UserDetails: React.FC = () => {
 
   const handleStatusUpdate = async (status: User['status']) => {
     if (!user) return;
+    
+    setIsUpdating(status);
+    // Simulate slight delay for UX response
+    await new Promise(resolve => setTimeout(resolve, 800));
+    
     const updatedUser = await userService.updateUserStatus(user.id, status);
     if (updatedUser) {
       setUser(updatedUser);
+      setShowSuccess(`User successfully ${status === 'active' ? 'activated' : 'blacklisted'}`);
+      setTimeout(() => setShowSuccess(null), 3000);
     }
+    setIsUpdating(null);
   };
 
   if (loading) return <div className="loading">Loading user details...</div>;
@@ -53,19 +63,27 @@ const UserDetails: React.FC = () => {
       <div className="page-header">
         <h1>User Details</h1>
         <div className="header-actions">
+          {showSuccess && (
+            <div className="success-toast">
+              <CheckCircle size={16} />
+              {showSuccess}
+            </div>
+          )}
           <Button 
             variant="outline" 
-            className="blacklist-btn"
+            className={`blacklist-btn ${user.status === 'blacklisted' ? 'active-status' : ''}`}
             onClick={() => handleStatusUpdate('blacklisted')}
+            disabled={user.status === 'blacklisted' || !!isUpdating}
           >
-            BLACKLIST USER
+            {isUpdating === 'blacklisted' ? 'BLACKLISTING...' : 'BLACKLIST USER'}
           </Button>
           <Button 
             variant="outline" 
-            className="activate-btn"
+            className={`activate-btn ${user.status === 'active' ? 'active-status' : ''}`}
             onClick={() => handleStatusUpdate('active')}
+            disabled={user.status === 'active' || !!isUpdating}
           >
-            ACTIVATE USER
+            {isUpdating === 'active' ? 'ACTIVATING...' : 'ACTIVATE USER'}
           </Button>
         </div>
       </div>
@@ -129,7 +147,7 @@ const UserDetails: React.FC = () => {
             <div className="info-item"><span>LEVEL OF EDUCATION</span><p>{user.education.level}</p></div>
             <div className="info-item"><span>EMPLOYMENT STATUS</span><p>{user.education.employmentStatus}</p></div>
             <div className="info-item"><span>SECTOR OF EMPLOYMENT</span><p>{user.education.sector}</p></div>
-            <div className="info-item"><span>DURATION OF EMPLOYMENT</span><p>{user.education.duration}</p></div>
+            <div className="info-item)<span>DURATION OF EMPLOYMENT</span><p>{user.education.duration}</p></div>
             <div className="info-item"><span>OFFICE EMAIL</span><p>{user.education.officeEmail}</p></div>
             <div className="info-item"><span>MONTHLY INCOME</span><p>₦{user.education.monthlyIncome[0]} - ₦{user.education.monthlyIncome[1]}</p></div>
             <div className="info-item"><span>LOAN REPAYMENT</span><p>₦{user.education.loanRepayment}</p></div>
