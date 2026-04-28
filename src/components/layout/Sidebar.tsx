@@ -10,8 +10,7 @@ import {
   PiggyBank, 
   UserPlus,
   Settings,
-  ChevronDown,
-  LayoutDashboard
+  ChevronDown
 } from 'lucide-react';
 import './Sidebar.scss';
 
@@ -40,54 +39,54 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen }) => {
           <Users size={16} />
           <span>Users</span>
         </NavLink>
-        <div className="sidebar-link">
+        <NavLink to="/guarantors" className="sidebar-link">
           <Users size={16} />
           <span>Guarantors</span>
-        </div>
-        <div className="sidebar-link">
+        </NavLink>
+        <NavLink to="/loans" className="sidebar-link">
           <HandCoins size={16} />
           <span>Loans</span>
-        </div>
-        <div className="sidebar-link">
+        </NavLink>
+        <NavLink to="/decision-models" className="sidebar-link">
           <UserCheck size={16} />
           <span>Decision Models</span>
-        </div>
-        <div className="sidebar-link">
+        </NavLink>
+        <NavLink to="/savings" className="sidebar-link">
           <PiggyBank size={16} />
           <span>Savings</span>
-        </div>
-        <div className="sidebar-link">
+        </NavLink>
+        <NavLink to="/loan-requests" className="sidebar-link">
           <UserPlus size={16} />
           <span>Loan Requests</span>
-        </div>
-        <div className="sidebar-link">
+        </NavLink>
+        <NavLink to="/whitelist" className="sidebar-link">
           <UserCheck size={16} />
           <span>Whitelist</span>
-        </div>
-        <div className="sidebar-link">
+        </NavLink>
+        <NavLink to="/karma" className="sidebar-link">
           <UserMinus size={16} />
           <span>Karma</span>
-        </div>
+        </NavLink>
       </div>
 
       <div className="sidebar-group">
         <h3>BUSINESSES</h3>
-        <div className="sidebar-link">
+        <NavLink to="/organization" className="sidebar-link">
           <Briefcase size={16} />
           <span>Organization</span>
-        </div>
-        <div className="sidebar-link">
+        </NavLink>
+        <NavLink to="/loan-products" className="sidebar-link">
           <HandCoins size={16} />
           <span>Loan Products</span>
-        </div>
-        <div className="sidebar-link">
+        </NavLink>
+        <NavLink to="/savings-products" className="sidebar-link">
           <PiggyBank size={16} />
           <span>Savings Products</span>
-        </div>
-        <div className="sidebar-link">
+        </NavLink>
+        <NavLink to="/fees" className="sidebar-link">
           <Settings size={16} />
           <span>Fees and Charges</span>
-        </div>
+        </NavLink>
       </div>
     </aside>
   );

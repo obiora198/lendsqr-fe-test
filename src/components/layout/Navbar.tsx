@@ -1,7 +1,8 @@
-import React from 'react';
-import { Search, Bell, ChevronDown, Menu } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Search, Bell, ChevronDown, Menu, LogOut } from 'lucide-react';
 import logo from '../../assets/logo.png';
-import avatar from '../../assets/d76431ad31054d654669dbf388b2a9ec503f6495.png'; // Using one of the avatar images
+import avatar from '../../assets/avatar.png';
 import './Navbar.scss';
 
 interface NavbarProps {
@@ -9,33 +10,74 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ toggleSidebar }) => {
+  const [showDropdown, setShowDropdown] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    navigate('/login');
+  };
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/users?search=${encodeURIComponent(searchQuery)}`);
+    }
+  };
+
+  useEffect(() => {
+    const closeDropdown = (e: MouseEvent) => {
+      if (!(e.target as HTMLElement).closest('.user-profile')) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener('click', closeDropdown);
+    return () => document.removeEventListener('click', closeDropdown);
+  }, []);
+
   return (
     <nav className="navbar">
       <div className="navbar-brand">
         <button className="menu-toggle" onClick={toggleSidebar}>
           <Menu size={24} />
         </button>
-        <img src={logo} alt="Lendsqr Logo" className="logo" />
+        <img src={logo} alt="Lendsqr Logo" className="logo" onClick={() => navigate('/dashboard')} style={{ cursor: 'pointer' }} />
       </div>
 
       <div className="navbar-search">
-        <div className="search-input">
-          <input type="text" placeholder="Search for anything" />
-          <button className="search-btn">
+        <form onSubmit={handleSearch} className="search-input">
+          <input 
+            type="text" 
+            placeholder="Search for anything" 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <button type="submit" className="search-btn">
             <Search size={14} color="white" />
           </button>
-        </div>
+        </form>
       </div>
 
       <div className="navbar-actions">
-        <a href="#" className="docs-link">Docs</a>
+        <a href="#" className="docs-link">
+          Docs
+        </a>
         <button className="notification-btn">
           <Bell size={20} />
         </button>
-        <div className="user-profile">
+        <div className="user-profile" onClick={() => setShowDropdown(!showDropdown)}>
           <img src={avatar} alt="Adedeji" className="avatar" />
           <span className="username">Adedeji</span>
-          <ChevronDown size={16} />
+          <ChevronDown size={16} className={showDropdown ? 'rotate' : ''} />
+          
+          {showDropdown && (
+            <div className="logout-dropdown">
+              <button onClick={handleLogout}>
+                <LogOut size={16} />
+                <span>Logout</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </nav>
