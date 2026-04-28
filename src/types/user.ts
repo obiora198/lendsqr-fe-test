@@ -15,6 +15,9 @@ export interface User {
     bvn: string;
     address: string;
     currency: string;
+    maritalStatus: string;
+    children: string;
+    residenceType: string;
   };
   guarantor: {
     firstName: string;
@@ -22,6 +25,8 @@ export interface User {
     phoneNumber: string;
     gender: string;
     address: string;
+    email: string;
+    relationship: string;
   };
   accountNumber: string;
   accountBalance: string;

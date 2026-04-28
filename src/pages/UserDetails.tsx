@@ -97,9 +97,9 @@ const UserDetails: React.FC = () => {
             <div className="info-item"><span>EMAIL ADDRESS</span><p>{user.email}</p></div>
             <div className="info-item"><span>BVN</span><p>{user.profile.bvn}</p></div>
             <div className="info-item"><span>GENDER</span><p>{user.profile.gender}</p></div>
-            <div className="info-item"><span>MARITAL STATUS</span><p>Single</p></div>
-            <div className="info-item"><span>CHILDREN</span><p>None</p></div>
-            <div className="info-item"><span>TYPE OF RESIDENCE</span><p>Parent's Apartment</p></div>
+            <div className="info-item"><span>MARITAL STATUS</span><p>{user.profile.maritalStatus}</p></div>
+            <div className="info-item"><span>CHILDREN</span><p>{user.profile.children}</p></div>
+            <div className="info-item"><span>TYPE OF RESIDENCE</span><p>{user.profile.residenceType}</p></div>
           </div>
         </section>
 
@@ -130,8 +130,8 @@ const UserDetails: React.FC = () => {
           <div className="info-grid">
             <div className="info-item"><span>FULL NAME</span><p>{user.guarantor.firstName} {user.guarantor.lastName}</p></div>
             <div className="info-item"><span>PHONE NUMBER</span><p>{user.guarantor.phoneNumber}</p></div>
-            <div className="info-item"><span>EMAIL ADDRESS</span><p>{user.guarantor.firstName.toLowerCase()}@gmail.com</p></div>
-            <div className="info-item"><span>RELATIONSHIP</span><p>Sister</p></div>
+            <div className="info-item"><span>EMAIL ADDRESS</span><p>{user.guarantor.email}</p></div>
+            <div className="info-item"><span>RELATIONSHIP</span><p>{user.guarantor.relationship}</p></div>
           </div>
         </section>
       </div>
