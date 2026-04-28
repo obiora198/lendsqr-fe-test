@@ -27,15 +27,17 @@ const UserDetails: React.FC = () => {
 
   const handleStatusUpdate = async (status: User['status']) => {
     if (!user) return;
-    
+
     setIsUpdating(status);
     // Simulate slight delay for UX response
-    await new Promise(resolve => setTimeout(resolve, 800));
-    
+    await new Promise((resolve) => setTimeout(resolve, 800));
+
     const updatedUser = await userService.updateUserStatus(user.id, status);
     if (updatedUser) {
       setUser(updatedUser);
-      setShowSuccess(`User successfully ${status === 'active' ? 'activated' : 'blacklisted'}`);
+      setShowSuccess(
+        `User successfully ${status === 'active' ? 'activated' : 'blacklisted'}`,
+      );
       setTimeout(() => setShowSuccess(null), 3000);
     }
     setIsUpdating(null);
@@ -50,7 +52,7 @@ const UserDetails: React.FC = () => {
     'Bank Details',
     'Loans',
     'Savings',
-    'App and System'
+    'App and System',
   ];
 
   return (
@@ -69,16 +71,18 @@ const UserDetails: React.FC = () => {
               {showSuccess}
             </div>
           )}
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             className={`blacklist-btn ${user.status === 'blacklisted' ? 'active-status' : ''}`}
             onClick={() => handleStatusUpdate('blacklisted')}
             disabled={user.status === 'blacklisted' || !!isUpdating}
           >
-            {isUpdating === 'blacklisted' ? 'BLACKLISTING...' : 'BLACKLIST USER'}
+            {isUpdating === 'blacklisted'
+              ? 'BLACKLISTING...'
+              : 'BLACKLIST USER'}
           </Button>
-          <Button 
-            variant="outline" 
+          <Button
+            variant="outline"
             className={`activate-btn ${user.status === 'active' ? 'active-status' : ''}`}
             onClick={() => handleStatusUpdate('active')}
             disabled={user.status === 'active' || !!isUpdating}
@@ -91,13 +95,19 @@ const UserDetails: React.FC = () => {
       <div className="user-summary-card">
         <div className="summary-top">
           <div className="profile-info">
-            <img src={user.profile.avatar} alt={user.userName} className="avatar" />
+            <img
+              src={user.profile.avatar}
+              alt={user.userName}
+              className="avatar"
+            />
             <div className="name-id">
-              <h2>{user.profile.firstName} {user.profile.lastName}</h2>
+              <h2>
+                {user.profile.firstName} {user.profile.lastName}
+              </h2>
               <p>{user.accountNumber}</p>
             </div>
           </div>
-          
+
           <div className="user-tier">
             <p>User's Tier</p>
             <div className="stars">
@@ -114,9 +124,9 @@ const UserDetails: React.FC = () => {
         </div>
 
         <div className="summary-tabs">
-          {tabs.map(tab => (
-            <button 
-              key={tab} 
+          {tabs.map((tab) => (
+            <button
+              key={tab}
               className={activeTab === tab ? 'active' : ''}
               onClick={() => setActiveTab(tab)}
             >
@@ -130,46 +140,119 @@ const UserDetails: React.FC = () => {
         <section className="details-section">
           <h3>Personal Information</h3>
           <div className="info-grid">
-            <div className="info-item"><span>FULL NAME</span><p>{user.profile.firstName} {user.profile.lastName}</p></div>
-            <div className="info-item"><span>PHONE NUMBER</span><p>{user.phoneNumber}</p></div>
-            <div className="info-item"><span>EMAIL ADDRESS</span><p>{user.email}</p></div>
-            <div className="info-item"><span>BVN</span><p>{user.profile.bvn}</p></div>
-            <div className="info-item"><span>GENDER</span><p>{user.profile.gender}</p></div>
-            <div className="info-item"><span>MARITAL STATUS</span><p>{user.profile.maritalStatus}</p></div>
-            <div className="info-item"><span>CHILDREN</span><p>{user.profile.children}</p></div>
-            <div className="info-item"><span>TYPE OF RESIDENCE</span><p>{user.profile.residenceType}</p></div>
+            <div className="info-item">
+              <span>FULL NAME</span>
+              <p>
+                {user.profile.firstName} {user.profile.lastName}
+              </p>
+            </div>
+            <div className="info-item">
+              <span>PHONE NUMBER</span>
+              <p>{user.phoneNumber}</p>
+            </div>
+            <div className="info-item">
+              <span>EMAIL ADDRESS</span>
+              <p>{user.email}</p>
+            </div>
+            <div className="info-item">
+              <span>BVN</span>
+              <p>{user.profile.bvn}</p>
+            </div>
+            <div className="info-item">
+              <span>GENDER</span>
+              <p>{user.profile.gender}</p>
+            </div>
+            <div className="info-item">
+              <span>MARITAL STATUS</span>
+              <p>{user.profile.maritalStatus}</p>
+            </div>
+            <div className="info-item">
+              <span>CHILDREN</span>
+              <p>{user.profile.children}</p>
+            </div>
+            <div className="info-item">
+              <span>TYPE OF RESIDENCE</span>
+              <p>{user.profile.residenceType}</p>
+            </div>
           </div>
         </section>
 
         <section className="details-section">
           <h3>Education and Employment</h3>
           <div className="info-grid">
-            <div className="info-item"><span>LEVEL OF EDUCATION</span><p>{user.education.level}</p></div>
-            <div className="info-item"><span>EMPLOYMENT STATUS</span><p>{user.education.employmentStatus}</p></div>
-            <div className="info-item"><span>SECTOR OF EMPLOYMENT</span><p>{user.education.sector}</p></div>
-            <div className="info-item)<span>DURATION OF EMPLOYMENT</span><p>{user.education.duration}</p></div>
-            <div className="info-item"><span>OFFICE EMAIL</span><p>{user.education.officeEmail}</p></div>
-            <div className="info-item"><span>MONTHLY INCOME</span><p>₦{user.education.monthlyIncome[0]} - ₦{user.education.monthlyIncome[1]}</p></div>
-            <div className="info-item"><span>LOAN REPAYMENT</span><p>₦{user.education.loanRepayment}</p></div>
+            <div className="info-item">
+              <span>LEVEL OF EDUCATION</span>
+              <p>{user.education.level}</p>
+            </div>
+            <div className="info-item">
+              <span>EMPLOYMENT STATUS</span>
+              <p>{user.education.employmentStatus}</p>
+            </div>
+            <div className="info-item">
+              <span>SECTOR OF EMPLOYMENT</span>
+              <p>{user.education.sector}</p>
+            </div>
+            <div className="info-item">
+              <span>DURATION OF EMPLOYMENT</span>
+              <p>{user.education.duration}</p>
+            </div>
+            <div className="info-item">
+              <span>OFFICE EMAIL</span>
+              <p>{user.education.officeEmail}</p>
+            </div>
+            <div className="info-item">
+              <span>MONTHLY INCOME</span>
+              <p>
+                ₦{user.education.monthlyIncome[0]} - ₦
+                {user.education.monthlyIncome[1]}
+              </p>
+            </div>
+            <div className="info-item">
+              <span>LOAN REPAYMENT</span>
+              <p>₦{user.education.loanRepayment}</p>
+            </div>
           </div>
         </section>
 
         <section className="details-section">
           <h3>Socials</h3>
           <div className="info-grid">
-            <div className="info-item"><span>TWITTER</span><p>{user.socials.twitter}</p></div>
-            <div className="info-item"><span>FACEBOOK</span><p>{user.socials.facebook}</p></div>
-            <div className="info-item"><span>INSTAGRAM</span><p>{user.socials.instagram}</p></div>
+            <div className="info-item">
+              <span>TWITTER</span>
+              <p>{user.socials.twitter}</p>
+            </div>
+            <div className="info-item">
+              <span>FACEBOOK</span>
+              <p>{user.socials.facebook}</p>
+            </div>
+            <div className="info-item">
+              <span>INSTAGRAM</span>
+              <p>{user.socials.instagram}</p>
+            </div>
           </div>
         </section>
 
         <section className="details-section">
           <h3>Guarantor</h3>
           <div className="info-grid">
-            <div className="info-item"><span>FULL NAME</span><p>{user.guarantor.firstName} {user.guarantor.lastName}</p></div>
-            <div className="info-item"><span>PHONE NUMBER</span><p>{user.guarantor.phoneNumber}</p></div>
-            <div className="info-item"><span>EMAIL ADDRESS</span><p>{user.guarantor.email}</p></div>
-            <div className="info-item"><span>RELATIONSHIP</span><p>{user.guarantor.relationship}</p></div>
+            <div className="info-item">
+              <span>FULL NAME</span>
+              <p>
+                {user.guarantor.firstName} {user.guarantor.lastName}
+              </p>
+            </div>
+            <div className="info-item">
+              <span>PHONE NUMBER</span>
+              <p>{user.guarantor.phoneNumber}</p>
+            </div>
+            <div className="info-item">
+              <span>EMAIL ADDRESS</span>
+              <p>{user.guarantor.email}</p>
+            </div>
+            <div className="info-item">
+              <span>RELATIONSHIP</span>
+              <p>{user.guarantor.relationship}</p>
+            </div>
           </div>
         </section>
       </div>
