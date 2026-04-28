@@ -1,0 +1,41 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.card {
+  @include card;
+  display: flex;
+  flex-direction: column;
+
+  &.stat-card {
+    padding: $spacing-xl $spacing-lg;
+    min-width: 240px;
+    flex: 1;
+
+    .card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      @include flex-center;
+      margin-bottom: $spacing-md;
+
+      img {
+        width: 22px;
+        height: 22px;
+      }
+    }
+
+    .card-label {
+      font-size: 14px;
+      font-weight: 500;
+      color: $text-color;
+      text-transform: uppercase;
+      margin-bottom: $spacing-sm;
+    }
+
+    .card-value {
+      font-size: 24px;
+      font-weight: 600;
+      color: $primary-color;
+    }
+  }
+}

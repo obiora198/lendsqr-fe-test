@@ -1,0 +1,129 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.navbar {
+  height: 100px;
+  background-color: $white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 60px;
+  box-shadow: 3px 0px 20px rgba(0, 0, 0, 0.04);
+  z-index: 100;
+
+  @include mobile {
+    padding: 0 $spacing-md;
+    height: 70px;
+  }
+}
+
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+
+  .logo {
+    height: 30px;
+    
+    @include mobile {
+      height: 20px;
+    }
+  }
+
+  .menu-toggle {
+    display: none;
+    color: $primary-color;
+
+    @include mobile {
+      display: block;
+    }
+  }
+}
+
+.navbar-search {
+  flex: 1;
+  max-width: 400px;
+  margin-left: 100px;
+
+  @include mobile {
+    display: none;
+  }
+
+  .search-input {
+    display: flex;
+    border: 1px solid rgba(84, 95, 125, 0.15);
+    border-radius: 8px;
+    overflow: hidden;
+
+    input {
+      flex: 1;
+      border: none;
+      padding: 10px $spacing-md;
+      font-size: 14px;
+      color: $text-color;
+
+      &::placeholder {
+        color: rgba(84, 95, 125, 0.7);
+      }
+    }
+
+    .search-btn {
+      background-color: $secondary-color;
+      width: 56px;
+      @include flex-center;
+    }
+  }
+}
+
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: $spacing-xl;
+
+  @include mobile {
+    gap: $spacing-md;
+  }
+
+  .docs-link {
+    color: $primary-color;
+    text-decoration: underline;
+    font-size: 16px;
+
+    @include mobile {
+      display: none;
+    }
+  }
+
+  .notification-btn {
+    color: $primary-color;
+  }
+
+  .user-profile {
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    cursor: pointer;
+
+    .avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+
+      @include mobile {
+        width: 32px;
+        height: 32px;
+      }
+    }
+
+    .username {
+      font-weight: 500;
+      color: $primary-color;
+      font-size: 16px;
+
+      @include mobile {
+        display: none;
+      }
+    }
+  }
+}

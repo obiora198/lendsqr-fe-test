@@ -1,0 +1,42 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-sm;
+  width: 100%;
+
+  label {
+    font-size: 14px;
+    font-weight: 500;
+    color: $text-color;
+    text-transform: uppercase;
+  }
+
+  input {
+    border: 2px solid rgba(84, 95, 125, 0.15);
+    border-radius: 5px;
+    padding: 12px $spacing-md;
+    font-size: 14px;
+    color: $text-color;
+    transition: border-color 0.2s ease;
+
+    &:focus {
+      border-color: $secondary-color;
+    }
+
+    &.error {
+      border-color: #e4033b;
+    }
+
+    &::placeholder {
+      color: rgba(84, 95, 125, 0.5);
+    }
+  }
+
+  .error-text {
+    font-size: 12px;
+    color: #e4033b;
+  }
+}
