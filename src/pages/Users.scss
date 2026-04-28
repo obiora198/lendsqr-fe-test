@@ -1,0 +1,171 @@
+@import '../styles/variables';
+@import '../styles/mixins';
+
+.users-page {
+  h1 {
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: $spacing-xl;
+  }
+}
+
+.table-container {
+  @include card;
+  padding: 0;
+  overflow-x: auto;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+
+  th {
+    padding: $spacing-lg $spacing-md;
+    font-size: 12px;
+    font-weight: 600;
+    color: $text-color;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(33, 63, 125, 0.1);
+    
+    display: flex;
+    align-items: center;
+    gap: $spacing-sm;
+    white-space: nowrap;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  tr {
+    border-bottom: 1px solid rgba(33, 63, 125, 0.1);
+    
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background-color: rgba($secondary-color, 0.02);
+    }
+  }
+
+  // Hack for table headers with flex
+  thead tr {
+    display: table-row;
+    th {
+      display: table-cell;
+    }
+  }
+
+  td {
+    padding: $spacing-lg $spacing-md;
+    font-size: 14px;
+    color: $text-color;
+    vertical-align: middle;
+  }
+
+  .actions-cell {
+    text-align: right;
+    
+    button {
+      color: $text-color;
+      padding: 4px;
+      border-radius: 4px;
+      
+      &:hover {
+        background-color: rgba($primary-color, 0.05);
+      }
+    }
+  }
+}
+
+.status-badge {
+  padding: 6px 12px;
+  border-radius: 100px;
+  font-size: 12px;
+  font-weight: 400;
+
+  &.status-active {
+    color: $status-active-text;
+    background-color: $status-active-bg;
+  }
+
+  &.status-pending {
+    color: $status-pending-text;
+    background-color: $status-pending-bg;
+  }
+
+  &.status-blacklisted {
+    color: $status-blacklisted-text;
+    background-color: $status-blacklisted-bg;
+  }
+
+  &.status-inactive {
+    color: $status-inactive-text;
+    background-color: $status-inactive-bg;
+  }
+}
+
+.pagination {
+  padding: $spacing-lg;
+  @include flex-between;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+
+  .pagination-info {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+    font-size: 14px;
+    color: $text-color;
+
+    select {
+      background-color: rgba(33, 63, 125, 0.1);
+      border: none;
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-weight: 600;
+      color: $primary-color;
+    }
+  }
+
+  .pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: $spacing-md;
+
+    button {
+      width: 30px;
+      height: 30px;
+      border-radius: 4px;
+      background-color: rgba(33, 63, 125, 0.1);
+      @include flex-center;
+      color: $primary-color;
+      font-weight: 600;
+
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+
+    .page-num {
+      font-size: 14px;
+      color: rgba($primary-color, 0.6);
+      cursor: pointer;
+
+      &.active {
+        color: $primary-color;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+.loading {
+  @include flex-center;
+  height: 200px;
+  font-size: 18px;
+  color: $primary-color;
+}

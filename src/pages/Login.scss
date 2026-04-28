@@ -1,0 +1,112 @@
+@import '../styles/variables';
+@import '../styles/mixins';
+
+.login-page {
+  display: flex;
+  min-height: 100vh;
+  background-color: $white;
+
+  @include mobile {
+    flex-direction: column;
+  }
+}
+
+.login-left {
+  flex: 1;
+  background-color: $white;
+  padding: 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  @include mobile {
+    padding: $spacing-xl;
+    flex: 0;
+  }
+
+  .logo-container {
+    .logo {
+      height: 30px;
+    }
+  }
+
+  .illustration-container {
+    @include flex-center;
+    flex: 1;
+
+    @include mobile {
+      display: none;
+    }
+
+    .illustration {
+      width: 100%;
+      max-width: 600px;
+    }
+  }
+}
+
+.login-right {
+  flex: 1;
+  box-shadow: 0px 15px 90px rgba(0, 0, 0, 0.03);
+  @include flex-center;
+  padding: 60px;
+
+  @include mobile {
+    padding: $spacing-xl;
+    align-items: flex-start;
+  }
+
+  .login-form-container {
+    width: 100%;
+    max-width: 450px;
+
+    h1 {
+      font-size: 40px;
+      font-weight: 700;
+      color: $primary-color;
+      margin-bottom: $spacing-sm;
+
+      @include mobile {
+        font-size: 30px;
+      }
+    }
+
+    p {
+      font-size: 20px;
+      color: $text-color;
+      margin-bottom: 60px;
+
+      @include mobile {
+        margin-bottom: $spacing-xl;
+      }
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: $spacing-lg;
+
+      .password-input-wrapper {
+        position: relative;
+
+        .toggle-password {
+          position: absolute;
+          right: $spacing-md;
+          top: 50%;
+          transform: translateY(-50%);
+          color: $secondary-color;
+          font-weight: 600;
+          font-size: 12px;
+          letter-spacing: 0.1em;
+        }
+      }
+
+      .forgot-password {
+        color: $secondary-color;
+        font-weight: 600;
+        font-size: 12px;
+        margin-bottom: $spacing-md;
+      }
+    }
+  }
+}

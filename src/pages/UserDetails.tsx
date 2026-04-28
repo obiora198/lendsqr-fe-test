@@ -1,0 +1,142 @@
+import React, { useEffect, useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { ArrowLeft, Star } from 'lucide-react';
+import { userService } from '../services/api';
+import { User } from '../types/user';
+import Button from '../components/common/Button';
+import './UserDetails.scss';
+
+const UserDetails: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('General Details');
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      if (id) {
+        const data = await userService.getUserById(id);
+        if (data) setUser(data);
+        setLoading(false);
+      }
+    };
+    fetchUser();
+  }, [id]);
+
+  if (loading) return <div className="loading">Loading user details...</div>;
+  if (!user) return <div className="error">User not found</div>;
+
+  const tabs = [
+    'General Details',
+    'Documents',
+    'Bank Details',
+    'Loans',
+    'Savings',
+    'App and System'
+  ];
+
+  return (
+    <div className="user-details-page">
+      <Link to="/users" className="back-link">
+        <ArrowLeft size={16} />
+        <span>Back to Users</span>
+      </Link>
+
+      <div className="page-header">
+        <h1>User Details</h1>
+        <div className="header-actions">
+          <Button variant="outline" className="blacklist-btn">BLACKLIST USER</Button>
+          <Button variant="outline" className="activate-btn">ACTIVATE USER</Button>
+        </div>
+      </div>
+
+      <div className="user-summary-card">
+        <div className="summary-top">
+          <div className="profile-info">
+            <img src={user.profile.avatar} alt={user.userName} className="avatar" />
+            <div className="name-id">
+              <h2>{user.profile.firstName} {user.profile.lastName}</h2>
+              <p>{user.accountNumber}</p>
+            </div>
+          </div>
+          
+          <div className="user-tier">
+            <p>User's Tier</p>
+            <div className="stars">
+              <Star size={16} fill="#E9B200" stroke="#E9B200" />
+              <Star size={16} stroke="#E9B200" />
+              <Star size={16} stroke="#E9B200" />
+            </div>
+          </div>
+
+          <div className="balance-info">
+            <h2>₦{user.accountBalance}</h2>
+            <p>{user.accountNumber}/Providus Bank</p>
+          </div>
+        </div>
+
+        <div className="summary-tabs">
+          {tabs.map(tab => (
+            <button 
+              key={tab} 
+              className={activeTab === tab ? 'active' : ''}
+              onClick={() => setActiveTab(tab)}
+            >
+              {tab}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="details-container">
+        <section className="details-section">
+          <h3>Personal Information</h3>
+          <div className="info-grid">
+            <div className="info-item"><span>FULL NAME</span><p>{user.profile.firstName} {user.profile.lastName}</p></div>
+            <div className="info-item"><span>PHONE NUMBER</span><p>{user.phoneNumber}</p></div>
+            <div className="info-item"><span>EMAIL ADDRESS</span><p>{user.email}</p></div>
+            <div className="info-item"><span>BVN</span><p>{user.profile.bvn}</p></div>
+            <div className="info-item"><span>GENDER</span><p>{user.profile.gender}</p></div>
+            <div className="info-item"><span>MARITAL STATUS</span><p>Single</p></div>
+            <div className="info-item"><span>CHILDREN</span><p>None</p></div>
+            <div className="info-item"><span>TYPE OF RESIDENCE</span><p>Parent's Apartment</p></div>
+          </div>
+        </section>
+
+        <section className="details-section">
+          <h3>Education and Employment</h3>
+          <div className="info-grid">
+            <div className="info-item"><span>LEVEL OF EDUCATION</span><p>{user.education.level}</p></div>
+            <div className="info-item"><span>EMPLOYMENT STATUS</span><p>{user.education.employmentStatus}</p></div>
+            <div className="info-item"><span>SECTOR OF EMPLOYMENT</span><p>{user.education.sector}</p></div>
+            <div className="info-item"><span>DURATION OF EMPLOYMENT</span><p>{user.education.duration}</p></div>
+            <div className="info-item"><span>OFFICE EMAIL</span><p>{user.education.officeEmail}</p></div>
+            <div className="info-item"><span>MONTHLY INCOME</span><p>₦{user.education.monthlyIncome[0]} - ₦{user.education.monthlyIncome[1]}</p></div>
+            <div className="info-item"><span>LOAN REPAYMENT</span><p>₦{user.education.loanRepayment}</p></div>
+          </div>
+        </section>
+
+        <section className="details-section">
+          <h3>Socials</h3>
+          <div className="info-grid">
+            <div className="info-item"><span>TWITTER</span><p>{user.socials.twitter}</p></div>
+            <div className="info-item"><span>FACEBOOK</span><p>{user.socials.facebook}</p></div>
+            <div className="info-item"><span>INSTAGRAM</span><p>{user.socials.instagram}</p></div>
+          </div>
+        </section>
+
+        <section className="details-section">
+          <h3>Guarantor</h3>
+          <div className="info-grid">
+            <div className="info-item"><span>FULL NAME</span><p>{user.guarantor.firstName} {user.guarantor.lastName}</p></div>
+            <div className="info-item"><span>PHONE NUMBER</span><p>{user.guarantor.phoneNumber}</p></div>
+            <div className="info-item"><span>EMAIL ADDRESS</span><p>{user.guarantor.firstName.toLowerCase()}@gmail.com</p></div>
+            <div className="info-item"><span>RELATIONSHIP</span><p>Sister</p></div>
+          </div>
+        </section>
+      </div>
+    </div>
+  );
+};
+
+export default UserDetails;

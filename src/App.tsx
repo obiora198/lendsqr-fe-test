@@ -2,11 +2,10 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import DashboardLayout from './components/layout/DashboardLayout';
 import './App.scss';
 
-// Temporary components for pages
-const Login = () => <div>Login Page</div>;
-const Dashboard = () => <div>Dashboard Page</div>;
-const Users = () => <div>Users Page</div>;
-const UserDetails = () => <div>User Details Page</div>;
+import Login from './pages/Login';
+import Dashboard from './pages/Dashboard';
+import Users from './pages/Users';
+import UserDetails from './pages/UserDetails';
 
 function App() {
   return (
