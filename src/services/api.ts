@@ -1,4 +1,3 @@
-import axios from 'axios';
 import type { User } from '../types/user';
 import { MOCK_USERS } from './mockData';
 import { storage } from '../utils/storage';
