@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, Star } from 'lucide-react';
 import { userService } from '../services/api';
-import { User } from '../types/user';
+import type { User } from '../types/user';
 import Button from '../components/common/Button';
 import './UserDetails.scss';
 

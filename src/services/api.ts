@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { User } from '../types/user';
+import type { User } from '../types/user';
 import { MOCK_USERS } from './mockData';
 
 // Simulate a network delay

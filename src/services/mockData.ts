@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker';
-import { User } from '../types/user';
+import type { User } from '../types/user';
 
 const statusOptions: User['status'][] = ['active', 'inactive', 'pending', 'blacklisted'];
 

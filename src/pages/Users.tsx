@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MoreVertical, Eye, UserX, UserCheck, Filter } from 'lucide-react';
 import { userService } from '../services/api';
-import { User } from '../types/user';
+import type { User } from '../types/user';
 import Card from '../components/common/Card';
 import usersIcon from '../assets/users1.png';
 import activeUsersIcon from '../assets/active-users.png';
