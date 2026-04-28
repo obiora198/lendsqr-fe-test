@@ -1,3 +1,4 @@
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
@@ -9,7 +10,7 @@ import { userService } from './services/api';
 import './index.scss';
 
 // Simple Protected Route Component
-const ProtectedRoute = ({ children }: { children: JSX.Element }) => {
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   if (!userService.isAuthenticated()) {
     return <Navigate to="/login" replace />;
   }
