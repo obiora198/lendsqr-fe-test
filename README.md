@@ -1,73 +1,81 @@
-# React + TypeScript + Vite
+# Lendsqr Frontend Test
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a React-based admin dashboard built as a technical assessment for Lendsqr. It features a responsive UI, mock data integration, and unit testing.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **React** with **TypeScript**
+- **Vite** (Build system)
+- **SCSS** (Styling with BEM-like structure)
+- **React Router** (Navigation)
+- **Axios** (API requests)
+- **Lucide React** (Icons)
+- **Faker.js** (Mock data generation)
+- **Vitest** & **React Testing Library** (Unit testing)
 
-## React Compiler
+## Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. **Login Page**: A pixel-perfect implementation of the login screen.
+2. **Dashboard**: Overview of key statistics.
+3. **Users Page**: 
+   - Displays 500 user records fetched from a mock API.
+   - Client-side pagination (10 records per page).
+   - Responsive table with horizontal scrolling on mobile.
+   - Status badges for different user states.
+4. **User Details Page**:
+   - Detailed view of a specific user.
+   - Tier system with stars.
+   - Tabbed navigation (General Details, Documents, etc.).
+   - Persistent storage simulation.
 
-## Expanding the ESLint configuration
+## Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Prerequisites
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Node.js (v18 or higher recommended)
+- npm or yarn
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Installation
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+1. Clone the repository:
+   ```bash
+   git clone <repository-url>
+   cd lendsqr-fe-test
+   ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+4. Run tests:
+   ```bash
+   npm run test
+   ```
+
+## Project Structure
+
+- `src/components`: Reusable UI components and layout wrappers.
+- `src/pages`: Main page components (Login, Dashboard, Users, UserDetails).
+- `src/services`: Mock data generation and API client logic.
+- `src/styles`: SCSS variables, mixins, and global styles.
+- `src/types`: TypeScript definitions.
+- `src/utils`: Helper functions and storage utilities.
+- `src/tests`: Unit tests for components and services.
+
+## Design Decisions
+
+- **Vite**: Chosen over CRA for its superior performance and modern HMR.
+- **SCSS**: Used for modular styling and to leverage variables/mixins for a consistent design system.
+- **Mock Data**: Generated 500 records using Faker.js to satisfy the "500 records" requirement reliably.
+- **Responsiveness**: Implemented using custom mixins and media queries to ensure a seamless experience across all devices.
+
+## Testing Strategy
+
+- **Positive Scenario Testing**: Verified that components render correctly and services fetch data as expected.
+- **Negative Scenario Testing**: Verified that the application handles non-existent data gracefully (e.g., non-existent user ID).

@@ -8,7 +8,7 @@ export const generateUsers = (count: number): User[] => {
     id: faker.string.uuid(),
     createdAt: faker.date.past().toISOString(),
     orgName: faker.company.name(),
-    userName: faker.internet.userName(),
+    userName: faker.internet.username(),
     email: faker.internet.email(),
     phoneNumber: faker.phone.number(),
     lastActiveDate: faker.date.recent().toISOString(),
@@ -41,9 +41,9 @@ export const generateUsers = (count: number): User[] => {
       loanRepayment: faker.finance.amount(),
     },
     socials: {
-      facebook: `@${faker.internet.userName()}`,
-      instagram: `@${faker.internet.userName()}`,
-      twitter: `@${faker.internet.userName()}`,
+      facebook: `@${faker.internet.username()}`,
+      instagram: `@${faker.internet.username()}`,
+      twitter: `@${faker.internet.username()}`,
     },
     status: faker.helpers.arrayElement(statusOptions),
   }));
