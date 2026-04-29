@@ -161,8 +161,8 @@ const Users: React.FC = () => {
     </div>
   );
 
-  const ActionsPopover = ({ userId }: { userId: string }) => (
-    <div className="actions-popover">
+  const ActionsPopover = ({ userId, isMobile }: { userId: string, isMobile?: boolean }) => (
+    <div className={`actions-popover ${isMobile ? 'mobile-popover' : ''}`}>
       <div className="action-item" onClick={() => handleUserClick(userId)}>
         <Eye size={14} /> View Details
       </div>
@@ -171,6 +171,41 @@ const Users: React.FC = () => {
       </div>
       <div className="action-item" onClick={() => handleStatusUpdate(userId, 'active')}>
         <UserCheck size={14} /> Activate User
+      </div>
+    </div>
+  );
+
+  const MobileUserCard = ({ user }: { user: User }) => (
+    <div className="mobile-user-card">
+      <div className="card-header">
+        <span className="org">{user.orgName}</span>
+        <button 
+          className="actions-btn"
+          onClick={() => setActiveActions(activeActions === user.id ? null : user.id)}
+        >
+          <MoreVertical size={18} />
+        </button>
+        {activeActions === user.id && <ActionsPopover userId={user.id} isMobile />}
+      </div>
+      <div className="card-body" onClick={() => handleUserClick(user.id)}>
+        <div className="info-row">
+          <span className="label">Username</span>
+          <span className="value">{user.userName}</span>
+        </div>
+        <div className="info-row">
+          <span className="label">Email</span>
+          <span className="value">{user.email}</span>
+        </div>
+        <div className="info-row">
+          <span className="label">Phone</span>
+          <span className="value">{user.phoneNumber}</span>
+        </div>
+        <div className="info-row">
+          <span className="label">Status</span>
+          <span className={`status-badge status-${user.status}`}>
+            {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
+          </span>
+        </div>
       </div>
     </div>
   );
@@ -198,57 +233,76 @@ const Users: React.FC = () => {
 
       <div className="table-container">
         {globalSearch && (
-          <div style={{ padding: '10px 20px', backgroundColor: '#f5f5f5', borderRadius: '4px', marginBottom: '10px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <div className="search-status-bar">
             <span>Showing results for: <strong>{globalSearch}</strong></span>
-            <button onClick={() => navigate('/users')} style={{ color: '#213f7d', fontWeight: 600, cursor: 'pointer' }}>Clear</button>
+            <button onClick={() => navigate('/users')}>Clear</button>
           </div>
         )}
-        <table className="users-table">
-          <thead>
-            <tr>
-              {['ORGANIZATION', 'USERNAME', 'EMAIL', 'PHONE NUMBER', 'DATE JOINED', 'STATUS'].map((col, index) => (
-                <th key={col}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    {col} 
-                    <ListFilter 
-                      size={14} 
-                      className="filter-icon" 
-                      style={{ cursor: 'pointer' }} 
-                      onClick={() => setActiveFilter(activeFilter === col ? null : col)}
-                    />
-                  </div>
-                  {activeFilter === col && <FilterPopover className={index >= 4 ? 'right-aligned' : ''} />}
-                </th>
-              ))}
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {currentItems.map((user) => (
-              <tr key={user.id}>
-                <td>{user.orgName}</td>
-                <td>{user.userName}</td>
-                <td>{user.email}</td>
-                <td>{user.phoneNumber}</td>
-                <td>{new Date(user.createdAt).toLocaleDateString()}</td>
-                <td>
-                  <span className={`status-badge status-${user.status}`}>
-                    {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
-                  </span>
-                </td>
-                <td className="actions-cell">
-                  <button 
-                    className="actions-btn"
-                    onClick={() => setActiveActions(activeActions === user.id ? null : user.id)}
-                  >
-                    <MoreVertical size={16} />
-                  </button>
-                  {activeActions === user.id && <ActionsPopover userId={user.id} />}
-                </td>
+        
+        {/* Desktop View */}
+        <div className="desktop-table-view">
+          <table className="users-table">
+            <thead>
+              <tr>
+                {['ORGANIZATION', 'USERNAME', 'EMAIL', 'PHONE NUMBER', 'DATE JOINED', 'STATUS'].map((col, index) => (
+                  <th key={col}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      {col} 
+                      <ListFilter 
+                        size={14} 
+                        className="filter-icon" 
+                        style={{ cursor: 'pointer' }} 
+                        onClick={() => setActiveFilter(activeFilter === col ? null : col)}
+                      />
+                    </div>
+                    {activeFilter === col && <FilterPopover className={index >= 4 ? 'right-aligned' : ''} />}
+                  </th>
+                ))}
+                <th></th>
               </tr>
+            </thead>
+            <tbody>
+              {currentItems.map((user) => (
+                <tr key={user.id}>
+                  <td>{user.orgName}</td>
+                  <td>{user.userName}</td>
+                  <td>{user.email}</td>
+                  <td>{user.phoneNumber}</td>
+                  <td>{new Date(user.createdAt).toLocaleDateString()}</td>
+                  <td>
+                    <span className={`status-badge status-${user.status}`}>
+                      {user.status.charAt(0).toUpperCase() + user.status.slice(1)}
+                    </span>
+                  </td>
+                  <td className="actions-cell">
+                    <button 
+                      className="actions-btn"
+                      onClick={() => setActiveActions(activeActions === user.id ? null : user.id)}
+                    >
+                      <MoreVertical size={16} />
+                    </button>
+                    {activeActions === user.id && <ActionsPopover userId={user.id} />}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Mobile View */}
+        <div className="mobile-cards-view">
+          <div className="mobile-filter-bar">
+            <button onClick={() => setActiveFilter(activeFilter === 'Mobile' ? null : 'Mobile')}>
+              <ListFilter size={16} /> Filter Results
+            </button>
+            {activeFilter === 'Mobile' && <FilterPopover className="mobile-popover" />}
+          </div>
+          <div className="mobile-cards-list">
+            {currentItems.map(user => (
+              <MobileUserCard key={user.id} user={user} />
             ))}
-          </tbody>
-        </table>
+          </div>
+        </div>
 
         <div className="pagination">
           <div className="pagination-info">
@@ -268,7 +322,12 @@ const Users: React.FC = () => {
             >
               &lt;
             </button>
-            <span className="page-num active">{currentPage}</span>
+            <div className="mobile-page-info">
+              Page {currentPage} of {totalPages}
+            </div>
+            <div className="desktop-page-info">
+              <span className="page-num active">{currentPage}</span>
+            </div>
             <button
               disabled={currentPage === totalPages}
               onClick={() => setCurrentPage((p) => p + 1)}

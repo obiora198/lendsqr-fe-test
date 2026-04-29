@@ -36,6 +36,13 @@
     align-items: center;
     gap: $spacing-lg;
 
+    @include mobile {
+      width: 100%;
+      flex-direction: row;
+      justify-content: space-between;
+      gap: $spacing-md;
+    }
+
     .success-toast {
       display: flex;
       align-items: center;
@@ -47,11 +54,30 @@
       border-radius: 4px;
       font-size: 14px;
       animation: fadeIn 0.3s ease;
+
+      @include mobile {
+        position: fixed;
+        top: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1001;
+        width: calc(100% - 40px);
+        justify-content: center;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        background-color: white;
+      }
     }
 
     button {
       transition: all 0.3s ease;
       
+      @include mobile {
+        flex: 1;
+        font-size: 12px;
+        padding: 10px 8px;
+        height: auto;
+      }
+
       &:disabled {
         opacity: 0.5;
         cursor: not-allowed;
