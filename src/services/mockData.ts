@@ -43,7 +43,7 @@ export const generateUsers = (count: number): User[] => {
         relationship: faker.helpers.arrayElement(['Brother', 'Sister', 'Parent', 'Friend']),
       },
     accountNumber: faker.finance.accountNumber(),
-    accountBalance: faker.finance.amount(),
+    accountBalance: faker.finance.amount({ min: 1000, max: 1000000 }),
     education: {
       level: faker.helpers.arrayElement(['B.Sc', 'M.Sc', 'PhD', 'Diploma']),
       employmentStatus: faker.helpers.arrayElement([
@@ -54,8 +54,11 @@ export const generateUsers = (count: number): User[] => {
       sector: faker.commerce.department(),
       duration: '2 years',
       officeEmail: faker.internet.email(),
-      monthlyIncome: [faker.finance.amount(), faker.finance.amount()],
-      loanRepayment: faker.finance.amount(),
+      monthlyIncome: [
+        faker.finance.amount({ min: 50000, max: 200000 }),
+        faker.finance.amount({ min: 200000, max: 500000 })
+      ],
+      loanRepayment: faker.finance.amount({ min: 1000, max: 50000 }),
     },
     socials: {
       facebook: `@${faker.internet.username()}`,

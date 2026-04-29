@@ -2,7 +2,7 @@ import type { User } from '../types/user';
 import { MOCK_USERS } from './mockData';
 import { storage } from '../utils/storage';
 
-const USERS_KEY = 'lendsqr_users';
+const USERS_KEY = 'lendsqr_users_v2';
 
 // Initialize users in storage if not exists
 const initializeUsers = () => {

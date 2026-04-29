@@ -55,12 +55,20 @@ const Users: React.FC = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const stats = [
-    { label: 'Users', value: '2,453', icon: usersIcon, bg: 'rgba(223, 24, 255, 0.1)' },
-    { label: 'Active Users', value: '2,453', icon: activeUsersIcon, bg: 'rgba(87, 24, 255, 0.1)' },
-    { label: 'Users with Loans', value: '12,453', icon: usersWithLoanIcon, bg: 'rgba(245, 95, 68, 0.1)' },
-    { label: 'Users with Savings', value: '102,453', icon: usersWithSavingsIcon, bg: 'rgba(255, 51, 102, 0.1)' },
-  ];
+  // Calculate statistics from mock data
+  const stats = useMemo(() => {
+    const totalUsers = users.length;
+    const activeUsers = users.filter(u => u.status === 'active').length;
+    const usersWithLoans = users.filter(u => parseFloat(u.education.loanRepayment) > 0).length;
+    const usersWithSavings = users.filter(u => parseFloat(u.accountBalance) > 20000).length;
+
+    return [
+      { label: 'Users', value: totalUsers.toLocaleString(), icon: usersIcon, bg: 'rgba(223, 24, 255, 0.1)' },
+      { label: 'Active Users', value: activeUsers.toLocaleString(), icon: activeUsersIcon, bg: 'rgba(87, 24, 255, 0.1)' },
+      { label: 'Users with Loans', value: usersWithLoans.toLocaleString(), icon: usersWithLoanIcon, bg: 'rgba(245, 95, 68, 0.1)' },
+      { label: 'Users with Savings', value: usersWithSavings.toLocaleString(), icon: usersWithSavingsIcon, bg: 'rgba(255, 51, 102, 0.1)' },
+    ];
+  }, [users]);
 
   // Filtering logic
   const filteredUsers = useMemo(() => {
